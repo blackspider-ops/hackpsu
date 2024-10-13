@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoodu - Upload Resume</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 50px;
+        }
+        .top-left h2 {
+            font-size: 2.5rem;
+            color: #58CC02;
+            margin: 0;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: auto;
+        }
+        .content {
+            text-align: center;
+            color: #333;
+        }
+        .columns {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            margin-top: 60px;
+        }
+        .left-column {
+            flex: 1;
+            padding: 40px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px dashed #58CC02;
+            transition: background-color 0.3s ease;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-column:hover {
+            background-color: #e8ffe8;
+        }
+        .right-column {
+            flex: 1;
+            padding: 40px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .upload-heading {
+            font-size: 3.5rem;
+            margin-bottom: 40px;
+        }
+        .submit-button {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            background-color: #58CC02;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-top: 60px;
+        }
+        .submit-button:hover {
+            transform: scale(1.05);
+        }
+        footer {
+            margin-top: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-left">
+        <h2>Zoodu</h2>
+    </div>
+    <div class="container">
+        <div class="content">
+            <h1 class="upload-heading">Upload Resume</h1>
+            <div class="columns">
+                <div class="left-column">
+                    <p>Drag & Drop your resume here or click to upload</p>
+                    <input type="file" accept="application/pdf" style="display: none;" id="resumeInput">
+                    <label for="resumeInput" style="cursor: pointer;">Choose File</label>
+                </div>
+                <div class="right-column">
+                    <h3>Tips for Your Resume:</h3>
+                    <p>Ensure that your resume is clear and easy to read. Avoid using columns, as they may not be interpreted correctly by our system. For best results, follow our guidelines and check out the sample resume below.</p>
+                    <a href="sample_resume.pdf" target="_blank" style="color: #58CC02;">View Sample Resume</a>
+                </div>
+            </div>
+            <button class="submit-button">Submit</button>
+        </div>
+    </div>
+    <footer>
+        © 2024 Zoodu | Empowering students to grow their careers
+    </footer>
+</body>
+</html>
