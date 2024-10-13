@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoodu - New Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .top-left {
+            position: absolute;
+            top: 10px;
+            left: 50px;
+        }
+        .top-left h2 {
+            font-size: 2.5rem;
+            color: #58CC02;
+            margin: 0;
+            line-height: 1;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: calc(100vh - 20px);
+        }
+        .content {
+            text-align: left;
+            color: #333;
+            display: flex;
+            align-items: center; /* Center text and image vertically */
+            gap: 20px; /* Space between the text and the image */
+        }
+        .welcome-message {
+            font-size: 3rem; /* Adjust as needed */
+            margin-bottom: 5px;
+            margin-top: 5px;
+        }
+        .selectable-boxes {
+            display: flex;
+            gap: 10px;
+            margin-top: 5px;
+            width: 100%;
+            height: 50vh;
+        }
+        .selectable-box {
+            flex: 1;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #333;
+            border-radius: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            padding: 20px;
+        }
+        .selectable-box:hover {
+            transform: scale(1.05);
+            background-color: #58CC02;
+        }
+        .selected {
+            background-color: #58CC02;
+            color: white;
+        }
+        footer {
+            margin-top: 20px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="top-left">
+        <h2>Zoodu</h2>
+    </div>
+    <div class="container">
+        <div class="content">
+            <div>
+                <h1 id="welcomeMessage" class="welcome-message">Hello Guest</h1>
+                <p style="font-size: 1.6rem; text-align: left; line-height: 1.6; margin-bottom: 10px;">
+                    <strong>How Would You Like to Proceed?</strong><br><br>
+                </p>
+            </div>
+            <div>
+                <img src="/Users/rajveersingh/Downloads/pandaBRF.png" alt="Zoodu Result Image" style="width: 250px; height: auto;margin-left: 50px;">
+            </div>
+        </div>
+
+        <div class="selectable-boxes">
+            <div class="selectable-box">Upload your resume</div>
+            <div class="selectable-box">Manually type up your resume</div>
+        </div>
+    </div>
+    <footer>
+        Â© 2024 Zoodu | Empowering students to grow their careers
+    </footer>
+</body>
+</html>
