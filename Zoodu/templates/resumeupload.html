@@ -99,7 +99,6 @@
             background-color: #e8ffe8;
         }
 
-        /* Make the label for the right column clickable */
         .right-column label {
             position: absolute;
             top: 0;
@@ -158,19 +157,20 @@
                 <div class="left-column">
                     <p>Drag & Drop your resume here or click to upload</p>
                     <input type="file" accept="application/pdf" id="resumeInput">
-                    <label for="resumeInput"></label> <!-- Label now covers the entire column -->
+                    <label for="resumeInput"></label>
                     <p class="file-name" id="fileName">No file selected</p>
                 </div>
 
                 <!-- Right Column -->
                 <div class="right-column">
-                    <label onclick="window.open('../static/files/sample.pdf', '_blank')"></label> <!-- Label now covers the entire right column -->
+                    <label onclick="window.open('../static/files/sample.pdf', '_blank')"></label>
                     <h3>Tips for Your Resume:</h3>
                     <p>Ensure that your resume is clear and easy to read. Avoid using columns, as they may not be interpreted correctly by our system. For best results, follow our guidelines and check out the sample resume below.</p>
-                    <a href="../static/files/sample.pdf"  style="text-decoration: none;" target="_blank" style="color: #58CC02;">View Sample Resume</a>
+                    <a href="../static/files/sample.pdf" style="text-decoration: none;" target="_blank" style="color: #58CC02;">View Sample Resume</a>
                 </div>
             </div>
-            <button class="submit-button">Submit</button>
+            <button id="submitBtn" class="submit-button">Submit</button>
+            <a href="{{ url_for('data_p') }}" class="button-login"> See result</a>
         </div>
     </div>
     <footer>
@@ -180,12 +180,51 @@
     <script>
         const resumeInput = document.getElementById('resumeInput');
         const fileNameDisplay = document.getElementById('fileName');
-
+        const submitBtn = document.getElementById('submitBtn');
+    
         // Listen for file input change
         resumeInput.addEventListener('change', function() {
             const fileName = resumeInput.files[0] ? resumeInput.files[0].name : 'No file selected';
             fileNameDisplay.textContent = fileName;
         });
+    
+        // Handle submit button click
+        submitBtn.addEventListener('click', function() {
+            const file = resumeInput.files[0];
+            if (!file) {
+                alert("Please select a file before submitting.");
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('resume', file);
+    
+            // Send the file using Fetch API
+            fetch('/save_file', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())  // Get the HTML response as text
+            .then(html => {
+                // Create a temporary element to load the returned HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+    
+                // Check if the HTML contains the result page (specific check for processed data)
+                if (tempDiv.querySelector('.result-content')) {
+                    // If the response contains a specific class for result, replace current page with the result
+                    document.body.innerHTML = html;
+                } else {
+                    alert("There was an issue processing your resume.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("An error occurred while uploading your resume.");
+            });
+        });
     </script>
+    
 </body>
+
 </html>
