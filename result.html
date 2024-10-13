@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoodu - New Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .top-left {
+            position: absolute;
+            top: 20px;
+            left: 50px;
+        }
+        .top-left h2 {
+            font-size: 2.5rem;
+            color: #58CC02;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .content {
+            text-align: center;
+            color: #333;
+        }
+        .welcome-message {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            text-align: left;
+            margin-top: 60px;
+        }
+        .selectable-boxes {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            width: 100%;
+            height: 60vh;
+        }
+        .selectable-box {
+            flex: 1;
+            height: 100%;
+            width: 600px;
+            background-color: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #333;
+            border-radius: 10px;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            cursor: pointer;
+            margin: 10px;
+        }
+        .selectable-box:hover {
+            transform: scale(1.05);
+        }
+        .more-options-button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #58CC02;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .more-options-button:hover {
+            transform: scale(1.05);
+        }
+        .selected {
+            background-color: #58CC02;
+            color: white;
+        }
+        footer {
+            margin-top: 40px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #999;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Simulating fetching the user's name from backend
+            const userName = "John Doe"; // Replace with dynamic data from backend
+            document.getElementById("welcomeMessage").innerText = `Hello, ${userName}`;
+
+            // Add click event listener to selectable boxes
+            const boxes = document.querySelectorAll('.selectable-box');
+            boxes.forEach(box => {
+                box.addEventListener('click', function() {
+                    boxes.forEach(b => b.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="top-left">
+        <h2>Zoodu</h2>
+    </div>
+    <div class="container">
+        <div class="content" style="display: flex; gap: 20px; align-items: center;">
+                <div style="flex: 1;">
+                    <h1 id="welcomeMessage" class="welcome-message">Hello, John Doe</h1>
+                    <p style="font-size: 1.2rem; text-align: left;">Welcome to Zoodu! Here you can explore your career opportunities and take the next steps towards your future. Let us guide you in achieving your goals with personalized options and support.</p>
+                </div>
+                <div style="flex: 1; text-align: center;">
+                    <img src="resultzoodu.png" alt="Zoodu Result Image" style="width: 250px; height: auto; margin-top: 60px;">
+                </div>
+            </div>
+            <div class="selectable-boxes">
+                <div class="selectable-box">Option 1</div>
+                <div class="selectable-box">Option 2</div>
+            </div>
+            <div style="margin-top: 40px;">
+                <button class="more-options-button">More Options</button>
+            </div>
+        </div>
+    </div>
+    <footer>
+        © 2024 Zoodu | Empowering students to grow their careers
+    </footer>
+</body>
+</html>
