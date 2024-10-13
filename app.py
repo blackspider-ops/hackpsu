@@ -12,26 +12,34 @@ load_dotenv()
 CLIENT_ID = os.getenv('LINKEDIN_CLIENT_ID')
 CLIENT_SECRET = os.getenv('LINKEDIN_CLIENT_SECRET')
 REDIRECT_URI = os.getenv('LINKEDIN_REDIRECT_URI')
-AUTHORIZATION_BASE_URL = "https://www.linkedin.com/oauth/v2/authorization"
+AUTHORIZATION_BASE_URL = "https://www.linkedin.com/oauth/v2/authorizatiotern"
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
 
 # LinkedIn Profile API URLs
 PROFILE_API_URL = "https://api.linkedin.com/v2/me"
-DETAILED_PROFILE_URL = ("https://api.linkedin.com/v2/me?projection="
-                        "(id,firstName,lastName,profilePicture(displayImage~:playableStreams),"
-                        "headline,summary,positions,education)")
+EMAIL_API_URL = "https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))"
+
+# Bearer token
+BEARER_TOKEN = "AQVAC4EyVnQzU92khhWOKFmqjL9_o4r545qz8C-5Rh1r6tTmOgpPnb1Ft5xUmQppNi8D0vAD4krAXmDdnv_3Y6HnysveYNbbh4VvQqUA6dlacCG3OgLip7GXipirP7nbSxOdmRh-vGXqM24R6caUvJJUgzZq9Xlktp0ATMTW3BdrZxI_wPsDCOWMCiXPPab3h3ZDIqaNq-EwNbknwLBOk0JutcSXnR6ySiDfQ-lNWf9NzcCMl9aWc6NdHW9nnnUNvmbaPLSTnCyoOY8XkZ97qUNKH5gf51-IJZcNMhP8zjzvAmUFYS8IuhHOYo9Cqvd1EBUH2DrjIDcxguOYMrfBVRKU8LbPVQ"
 
 # Flask app setup
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
 
-# Create OAuth2 Session
+# Define the allowed scopes in the order LinkedIn expects
+SCOPES = "profile email w_member_social"
+
+# Create OAuth2 Session with Bearer Token
 def make_linkedin_session(token=None, state=None):
+    if token is None:
+        token = {'access_token': BEARER_TOKEN, 'token_type': 'Bearer'}
+    
     return OAuth2Session(
-        CLIENT_ID,
+        client_id=CLIENT_ID,
         redirect_uri=REDIRECT_URI,
         token=token,
-        state=state
+        state=state,
+        scope=SCOPES.split()
     )
 
 @app.route('/')
@@ -40,58 +48,42 @@ def index():
 
 @app.route('/login')
 def login():
-    # Define the scopes
-    scopes = ["r_liteprofile", "r_emailaddress", "w_member_social"]
     linkedin = make_linkedin_session()
-
-    # Generate the authorization URL
-    authorization_url, state = linkedin.authorization_url(
-        AUTHORIZATION_BASE_URL,
-        scope=' '.join(scopes)  # Join scopes with a space
-    )
-
-    # Save the state in the session for security
+    authorization_url, state = linkedin.authorization_url(AUTHORIZATION_BASE_URL)
     session['oauth_state'] = state
     return redirect(authorization_url)
 
 @app.route('/callback')
 def callback():
-    linkedin = make_linkedin_session(state=session.get('oauth_state'))
-
-    # Fetch the token
-    token = linkedin.fetch_token(
-        TOKEN_URL,
-        client_secret=CLIENT_SECRET,
-        authorization_response=request.url
-    )
-
-    # Save the token in the session
-    session['oauth_token'] = token
-
-    # Now you can use the token to access LinkedIn's API
-    # Example: getting user profile data
-    user_info = linkedin.get('https://api.linkedin.com/v2/me').json()
-    print(user_info)  # Or handle the user data as needed
-
-    return f'Logged in as: {user_info.get("localizedFirstName")} {user_info.get("localizedLastName")}'
+    # No need to fetch a new token, bearer token is already set
+    return redirect(url_for('profile'))
 
 @app.route('/profile')
 def profile():
-    linkedin = make_linkedin_session(token=session.get('oauth_token'))
-
+    linkedin = make_linkedin_session()
+    
     # Fetch the user's basic LinkedIn profile
     response = linkedin.get(PROFILE_API_URL)
     profile_data = response.json()
-
-    # Fetch detailed profile information (including education and experience)
-    detailed_response = linkedin.get(DETAILED_PROFILE_URL)
-    detailed_profile_data = detailed_response.json()
-
+    
+    # Fetch email address
+    email_response = linkedin.get(EMAIL_API_URL)
+    email_data = email_response.json()
+    
+    # Safely access the email address
+    email_address = 'No email found'
+    if 'elements' in email_data:
+        elements = email_data['elements']
+        if elements:
+            for element in elements:
+                if 'handle~' in element:
+                    email_address = element['handle~'].get('emailAddress', 'No email found')
+                    break
+    
     return {
         'basic_profile': profile_data,
-        'detailed_profile': detailed_profile_data
+        'email': email_address
     }
 
 if __name__ == "__main__":
     app.run(debug=True, host='0.0.0.0', port=7896)
-    
