@@ -17,7 +17,7 @@ def home():
 # Route for the about page
 @app.route('/about_us')
 def about_us():
-    return render_template('about_us.html')
+    return render_template('templates/about_us.html')
 
 # Route to handle form submissions (e.g., user signup or resume upload)
 @app.route('/signup', methods=['GET', 'POST'])
@@ -50,4 +50,4 @@ def result():
     return render_template('result.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=7896)

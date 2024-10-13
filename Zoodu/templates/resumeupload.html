@@ -57,10 +57,31 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
+            position: relative; /* Ensure label positioning */
         }
         .left-column:hover {
             background-color: #e8ffe8;
         }
+
+        .left-column label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #resumeInput {
+            display: none;
+        }
+
         .right-column {
             flex: 1;
             padding: 40px;
@@ -70,7 +91,29 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
+            cursor: pointer; /* Add cursor pointer */
+            position: relative; /* Added to ensure label positioning */
         }
+
+        .right-column:hover {
+            background-color: #e8ffe8;
+        }
+
+        /* Make the label for the right column clickable */
+        .right-column label {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
         .upload-heading {
             font-size: 3.5rem;
             margin-bottom: 40px;
@@ -89,6 +132,11 @@
         .submit-button:hover {
             transform: scale(1.05);
         }
+        .file-name {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            color: #58CC02;
+        }
         footer {
             margin-top: 40px;
             width: 100%;
@@ -106,15 +154,20 @@
         <div class="content">
             <h1 class="upload-heading">Upload Resume</h1>
             <div class="columns">
+                <!-- Left Column -->
                 <div class="left-column">
                     <p>Drag & Drop your resume here or click to upload</p>
-                    <input type="file" accept="application/pdf" id="resumeInput" style="display:none">
-                    <label for="resumeInput" style="cursor:pointer;">Choose File</label>
+                    <input type="file" accept="application/pdf" id="resumeInput">
+                    <label for="resumeInput"></label> <!-- Label now covers the entire column -->
+                    <p class="file-name" id="fileName">No file selected</p>
                 </div>
+
+                <!-- Right Column -->
                 <div class="right-column">
+                    <label onclick="window.open('../static/files/sample.pdf', '_blank')"></label> <!-- Label now covers the entire right column -->
                     <h3>Tips for Your Resume:</h3>
                     <p>Ensure that your resume is clear and easy to read. Avoid using columns, as they may not be interpreted correctly by our system. For best results, follow our guidelines and check out the sample resume below.</p>
-                    <a href="sample_resume.pdf" target="_blank" style="color: #58CC02;">View Sample Resume</a>
+                    <a href="../static/files/sample.pdf"  style="text-decoration: none;" target="_blank" style="color: #58CC02;">View Sample Resume</a>
                 </div>
             </div>
             <button class="submit-button">Submit</button>
@@ -123,5 +176,16 @@
     <footer>
         © 2024 Zoodu | Empowering students to grow their careers
     </footer>
+
+    <script>
+        const resumeInput = document.getElementById('resumeInput');
+        const fileNameDisplay = document.getElementById('fileName');
+
+        // Listen for file input change
+        resumeInput.addEventListener('change', function() {
+            const fileName = resumeInput.files[0] ? resumeInput.files[0].name : 'No file selected';
+            fileNameDisplay.textContent = fileName;
+        });
+    </script>
 </body>
 </html>
