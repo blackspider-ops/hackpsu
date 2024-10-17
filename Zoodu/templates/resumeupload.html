@@ -44,70 +44,38 @@
             width: 100%;
             margin-top: 60px;
         }
-        .left-column {
+        .left-column, .right-column {
             flex: 1;
             padding: 40px;
             background-color: #f0f0f0;
             border-radius: 15px;
-            text-align: center;
-            border: 2px dashed #58CC02;
-            transition: background-color 0.3s ease;
             height: 400px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            position: relative; /* Ensure label positioning */
+            transition: background-color 0.3s ease;
+            cursor: pointer; /* Ensure the whole box is clickable */
+            position: relative; /* Added to allow label positioning */
         }
-        .left-column:hover {
+        .left-column:hover, .right-column:hover {
             background-color: #e8ffe8;
         }
 
-        .left-column label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-
+        /* Hide the file input */
         #resumeInput {
             display: none;
         }
 
-        .right-column {
-            flex: 1;
-            padding: 40px;
-            background-color: #f0f0f0;
-            border-radius: 15px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            cursor: pointer; /* Add cursor pointer */
-            position: relative; /* Added to ensure label positioning */
-        }
-
-        .right-column:hover {
-            background-color: #e8ffe8;
-        }
-
-        .right-column label {
+        /* Ensure label covers the entire left column */
+        .left-column label {
             position: absolute;
             top: 0;
             left: 0;
-            right: 0;
-            bottom: 0;
             width: 100%;
             height: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
@@ -152,25 +120,26 @@
     <div class="container">
         <div class="content">
             <h1 class="upload-heading">Upload Resume</h1>
-            <div class="columns">
-                <!-- Left Column -->
-                <div class="left-column">
-                    <p>Drag & Drop your resume here or click to upload</p>
-                    <input type="file" accept="application/pdf" id="resumeInput">
-                    <label for="resumeInput"></label>
-                    <p class="file-name" id="fileName">No file selected</p>
-                </div>
+            <form method="POST" enctype="multipart/form-data" action="/save_file">
+                <div class="columns">
+                    <!-- Left Column for Resume Upload -->
+                    <div class="left-column">
+                        <label for="resumeInput"> <!-- Label covers the entire column -->
+                            <p>Drag & Drop your resume here or click to upload</p>
+                            <input type="file" accept="application/pdf" id="resumeInput" name="resume">
+                            <p class="file-name" id="fileName">No file selected</p>
+                        </label>
+                    </div>
 
-                <!-- Right Column -->
-                <div class="right-column">
-                    <label onclick="window.open('../static/files/sample.pdf', '_blank')"></label>
-                    <h3>Tips for Your Resume:</h3>
-                    <p>Ensure that your resume is clear and easy to read. Avoid using columns, as they may not be interpreted correctly by our system. For best results, follow our guidelines and check out the sample resume below.</p>
-                    <a href="../static/files/sample.pdf" style="text-decoration: none;" target="_blank" style="color: #58CC02;">View Sample Resume</a>
+                    <!-- Right Column for Resume Tips -->
+                    <div class="right-column">
+                        <h3>Tips for Your Resume:</h3>
+                        <p>Ensure that your resume is clear and easy to read. Avoid using columns, as they may not be interpreted correctly by our system.</p>
+                        <a href="../static/files/sample.pdf" style="text-decoration: none;" target="_blank">View Sample Resume</a>
+                    </div>
                 </div>
-            </div>
-            <button id="submitBtn" class="submit-button">Submit</button>
-            <a href="{{ url_for('data_p') }}" class="button-login"> See result</a>
+                <button id="submitBtn" class="submit-button" type="submit">Submit</button>
+            </form>
         </div>
     </div>
     <footer>
@@ -180,51 +149,11 @@
     <script>
         const resumeInput = document.getElementById('resumeInput');
         const fileNameDisplay = document.getElementById('fileName');
-        const submitBtn = document.getElementById('submitBtn');
     
-        // Listen for file input change
         resumeInput.addEventListener('change', function() {
             const fileName = resumeInput.files[0] ? resumeInput.files[0].name : 'No file selected';
             fileNameDisplay.textContent = fileName;
         });
-    
-        // Handle submit button click
-        submitBtn.addEventListener('click', function() {
-            const file = resumeInput.files[0];
-            if (!file) {
-                alert("Please select a file before submitting.");
-                return;
-            }
-    
-            const formData = new FormData();
-            formData.append('resume', file);
-    
-            // Send the file using Fetch API
-            fetch('/save_file', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())  // Get the HTML response as text
-            .then(html => {
-                // Create a temporary element to load the returned HTML
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = html;
-    
-                // Check if the HTML contains the result page (specific check for processed data)
-                if (tempDiv.querySelector('.result-content')) {
-                    // If the response contains a specific class for result, replace current page with the result
-                    document.body.innerHTML = html;
-                } else {
-                    alert("There was an issue processing your resume.");
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert("An error occurred while uploading your resume.");
-            });
-        });
     </script>
-    
 </body>
-
 </html>
